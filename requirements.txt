@@ -1,2 +1,5 @@
+numpy>=1.14.2
 requests>=2.3.0
+scikit-image>=0.9.3
 unidecode>=1.0.22
+dlib>=19.9.0
