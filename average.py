@@ -9,24 +9,30 @@ import sys
 import cv2
 import numpy as np
 
-if len(sys.argv) != 2:
+if len(sys.argv) < 2:
     print(
-        'Missing argument. Please provide a path to the image folder.\n'
+        'Missing arguments. Please provide a path to the image folder.\n'
         'The folder should contain both images (.jpg) and landmarks (.txt)\n'
         'Usage example: python average.py ./images\n'
     )
     exit()
 
 def main():
-    path = sys.argv[1]
+    # Default size of the output image
+    w = 170
+    h = 240
 
-    # Dimensions of output image
-    w = 340
-    h = 480
+    # Overwrite default image size
+    if len(sys.argv) == 3:
+        if str.isdigit(sys.argv[2]):
+            w = int(sys.argv[2])
+        if str.isdigit(sys.argv[3]):
+            h = int(sys.argv[3])
+
+    path = sys.argv[1]
 
     # Read points for all images
     all_points = read_points(path)
-
     # Read all images
     images = read_images(path)
 
