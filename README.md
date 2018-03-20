@@ -1,6 +1,6 @@
 # Average faces with OpenCV (Python)
 
-Calculate the image of an average face from multiple images using the machine learning library [dlib](http://dlib.net/) and the computer vision toolkit [OpenCV](https://opencv.org/). For this example, we'll use images of Bavarian politicians.
+Calculate an average face from multiple images using the machine learning library **dlib** and the computer vision toolkit **OpenCV**. For this example, we'll use images of Bavarian politicians. These instructions and the some of the code build on Satya Mallick's excellent introduction to computer vision: [Learn OpenCV](http://www.learnopencv.com/average-face-opencv-c-python-tutorial/).
 
 ![Average face example](example.jpg)
 
@@ -21,17 +21,23 @@ id,forename,name,title,party,gender
 
 ## Requirements
 
-Python 2 is required for running the scripts, though it might work with Python 3 as well.
+[Python 2](https://www.python.org/downloads/) is required for running the scripts, though it might work with Python 3 as well. [OpenCV Python](https://pypi.python.org/pypi/opencv-python) uses pre-compiled OpenCV binary and can be installed using the Python package manager [pip](https://pypi.python.org/pypi/pip). Make sure to remove previous or other versions of OpenCV, to avoid conflicts. 
 
-Dlib, which we'll use for landmark extraction, requires CMake to build:
+[Dlib](http://dlib.net/), which we'll use for landmark extraction, requires CMake to build:
 
 ```
 $ brew install cmake
 ```
 
-I've tested the scripts on a Mac running High Sierra (10.13). Linux users might need to change a few commands (like `apt-get install`) to set up their system and get the code to run.
+I've tested the scripts on a Mac running High Sierra (10.13). Linux users might need to change a few commands (like `apt-get install`) to set up their system and get the code to run. To avoid Python dependency trouble, we'll use the Python virtual environment wrapper [virtualenv](https://virtualenv.pypa.io/en/stable/).
 
 ## Setup
+
+Update your Python package manager:
+
+```
+pip install --upgrade pip
+```
 
 Create a new virtual environment:
 
@@ -96,22 +102,24 @@ $ python extract.py shape_predictor_68_face_landmarks.dat ./images
 
 The extracted landmarks will be saved as list of xy coordinates in the same folder as the images, using a ".txt" extension.
 
+See the references for more info about facial landmark recognition.
+
 ## Average faces
 
+Bring the images to the same size and roughly align the images using the position of the eyes. Other features of the face might be misaligned. Therefore, we'll use a bounding box to triangulate the landmark points ([Delaunay Triangulation](http://www.learnopencv.com/delaunay-triangulation-and-voronoi-diagram-using-opencv-c-python/)). These triangles can then be warped to match the other triangles, so the faces line up neatly. Finally the images will be blended together by applying some transparency.
+
+To run the script, provide the path to your image folder. The folder should contain both images (.jpg) and landmarks (.txt). Optionally, you can specify the desired output size for the output image (width, height):
+
 ```
-w = 340;
-h = 480;
+$ python average.py ./images 170 240
 ```
+
+If need a detailed explanation on how this works, head over to [Learn OpenCV](http://www.learnopencv.com/average-face-opencv-c-python-tutorial/).
 
 ## References
 
-One Millisecond Face Alignment with an Ensemble of Regression Trees by
-Vahid Kazemi and Josephine Sullivan, CVPR 2014
-and was trained on the iBUG 300-W face landmark dataset (see
-https://ibug.doc.ic.ac.uk/resources/facial-point-annotations/):  
-     
-C. Sagonas, E. Antonakos, G, Tzimiropoulos, S. Zafeiriou, M. Pantic. 
-300 faces In-the-wild challenge: Database and results. 
-Image and Vision Computing (IMAVIS), Special Issue on Facial Landmark Localisation "In-The-Wild". 2016.
+Papers on which feature extraction methods used in dlib are based:
 
-## Improvements
+- C. Sagonas, E. Antonakos, G, Tzimiropoulos, S. Zafeiriou, M. Pantic. [300 faces In-the-wild challenge: Database and results](https://ibug.doc.ic.ac.uk/media/uploads/documents/sagonas_2016_imavis.pdf). Image and Vision Computing (IMAVIS), Special Issue on Facial Landmark Localisation "In-The-Wild". 2016.
+- C. Sagonas, G. Tzimiropoulos, S. Zafeiriou, M. Pantic. [A semi-automatic methodology for facial landmark annotation](https://ibug.doc.ic.ac.uk/media/uploads/documents/sagonas_cvpr_2013_amfg_w.pdf). Proceedings of IEEE Int’l Conf. Computer Vision and Pattern Recognition (CVPR-W), 5th Workshop on Analysis and Modeling of Faces and Gestures (AMFG 2013). Oregon, USA, June 2013.
+- C. Sagonas, G. Tzimiropoulos, S. Zafeiriou, M. Pantic. [300 Faces in-the-Wild Challenge: The first facial landmark localization Challenge](https://ibug.doc.ic.ac.uk/media/uploads/documents/sagonas_iccv_2013_300_w.pdf). Proceedings of IEEE Int’l Conf. on Computer Vision (ICCV-W), 300 Faces in-the-Wild Challenge (300-W). Sydney, Australia, December 2013.
