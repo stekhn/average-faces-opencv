@@ -2,6 +2,7 @@
 
 # Copyright (c) 2016 Satya Mallick <spmallick@learnopencv.com>
 # All rights reserved. No warranty, explicit or implicit, provided.
+# Modifications and small fixes by Steffen Kühne, 2018
 
 import os
 import math
@@ -47,8 +48,8 @@ def main():
 
     # Add boundary points for delaunay triangulation
     boundary_pts = np.array([
-        (0, 0), (w/2, 0), (w-1, 0), (w-1, h/2),
-        (w-1, h-1), (w/2, h-1), (0, h-1), (0, h/2)
+        (0, 0), (w / 2, 0), (w - 1, 0), (w - 1, h / 2),
+        (w - 1, h - 1), (w / 2, h - 1), (0, h - 1), (0, h / 2)
     ])
 
     # Initialize location of average points to 0s
