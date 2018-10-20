@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+#coding=utf8
 
 # Copyright (c) 2016 Satya Mallick <spmallick@learnopencv.com>
 # All rights reserved. No warranty, explicit or implicit, provided.
@@ -131,12 +132,12 @@ def read_points(path):
     # Create an array of array of points.
     points_array = []
 
-    #List all files in the directory and read points from text files one by one
+    # List all files in the directory and read points from text files one by one
     for file_path in sorted(os.listdir(path)):
-        print file_path
+        print(file_path)
 
         if file_path.endswith('.txt'):
-            #Create an array of points.
+            # Create an array of points.
             points = []
 
             # Read points from file_path
@@ -272,7 +273,7 @@ def warp_triangle(img1, img2, t1, t2):
     r2 = cv2.boundingRect(np.float32([t2]))
 
     # Offset points by left top corner of the respective rectangles
-    t1_rect = [] 
+    t1_rect = []
     t2_rect = []
     t2_rect_int = []
 
