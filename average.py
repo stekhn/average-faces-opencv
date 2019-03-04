@@ -63,7 +63,7 @@ def main():
 
     # Warp images and trasnform landmarks to output coordinate system,
     # and find average of transformed landmarks.
-    for i in xrange(0, num_images):
+    for i in range(0, num_images):
 
         points1 = all_points[i]
 
@@ -98,14 +98,14 @@ def main():
     output = np.zeros((h, w, 3), np.float32())
 
     # Warp input images to average image landmarks
-    for i in xrange(0, len(images_norm)):
+    for i in range(0, len(images_norm)):
         img = np.zeros((h, w, 3), np.float32())
         # Transform triangles one by one
-        for j in xrange(0, len(tri)):
+        for j in range(0, len(tri)):
             t_in = []
             t_out = []
 
-            for k in xrange(0, 3):
+            for k in range(0, 3):
                 p_in = points_norm[i][tri[j][k]]
                 p_in = constrain_point(p_in, w, h)
 
@@ -124,9 +124,11 @@ def main():
     output = output / num_images
 
     # Display result
-    cv2.imshow('image', output)
-    cv2.waitKey(0)
-
+    # cv2.imshow('image', output)
+    # cv2.waitKey(0)
+    # Saving result
+    cv2.imwrite( "average_face.jpg", 255 * output)
+  
 # Read points from text files in directory
 def read_points(path):
     # Create an array of array of points.
@@ -195,9 +197,9 @@ def similarity_transform(in_points, out_points):
 
     out_pts.append([np.int(xout), np.int(yout)])
 
-    tform = cv2.estimateRigidTransform(np.array([in_pts]), np.array([out_pts]), False)
-
-    return tform
+    tform = cv2.estimateAffinePartial2D(np.array([in_pts]), np.array([out_pts]));
+    
+    return tform[0]
 
 # Check if a point is inside a rectangle
 def rect_contains(rect, point):
@@ -238,8 +240,8 @@ def calculate_triangles(rect, points):
 
         if rect_contains(rect, pt1) and rect_contains(rect, pt2) and rect_contains(rect, pt3):
             ind = []
-            for j in xrange(0, 3):
-                for k in xrange(0, len(points)):
+            for j in range(0, 3):
+                for k in range(0, len(points)):
                     if abs(pt[j][0] - points[k][0]) < 1.0 and abs(pt[j][1] - points[k][1]) < 1.0:
                         ind.append(k)
             if len(ind) == 3:
@@ -277,7 +279,7 @@ def warp_triangle(img1, img2, t1, t2):
     t2_rect = []
     t2_rect_int = []
 
-    for i in xrange(0, 3):
+    for i in range(0, 3):
         t1_rect.append(((t1[i][0] - r1[0]), (t1[i][1] - r1[1])))
         t2_rect.append(((t2[i][0] - r2[0]), (t2[i][1] - r2[1])))
         t2_rect_int.append(((t2[i][0] - r2[0]), (t2[i][1] - r2[1])))
